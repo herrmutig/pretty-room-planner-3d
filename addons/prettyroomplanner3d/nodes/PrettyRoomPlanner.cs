@@ -4,6 +4,7 @@ using Godot.Collections;
 
 namespace PrettyDunGen3D;
 
+// TODO Make it seedable..
 public enum PlannerConnection
 {
     Any,

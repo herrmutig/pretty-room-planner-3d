@@ -35,9 +35,6 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
     [Export]
     public bool InvertRowOrder { get; set; } = false;
 
-    [Export]
-    public Vector3 Offset { get; set; } = Vector3.Zero;
-
     [ExportGroup("Cell Settings")]
     [Export]
     public bool AlwaysRoundToNextCell { get; set; } = true;
@@ -178,7 +175,7 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
         Vector3 origin = Vector3.Zero;
         origin.X = -size.X * 0.5f + 0.5f * CellSizeX;
         origin.Z = -size.Z * 0.5f + 0.5f * CellSizeZ;
-        return origin + Offset;
+        return origin + Position;
     }
 
     private int CalculateIterationLimit(int iterationDimension, int limit)
@@ -197,7 +194,7 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
         EnsureDebugDrawer();
         debugDrawer.Clear();
 
-        if (!debugDrawer.IsNodeSelectedInEditor(this))
+        if (!debugDrawer.IsNodeSelectedInEditor(this) && !debugDrawer.IsDirectChildSelected(this))
             return;
 
         foreach (var transform in GetTransformations())

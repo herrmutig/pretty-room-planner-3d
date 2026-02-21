@@ -17,7 +17,7 @@ public partial class Draw3DMeshInstance : MeshInstance3D
         TopLevel = true;
     }
 
-    public bool IsAnySelectedNodeAnDecendantOf(Node3D node)
+    public bool IsAnySelectedNodeAnDecendantOf(Node node)
     {
         if (!Engine.IsEditorHint())
             return false;
@@ -36,7 +36,24 @@ public partial class Draw3DMeshInstance : MeshInstance3D
         return false;
     }
 
-    public bool IsNodeSelectedInEditor(Node3D node)
+    public bool IsDirectChildSelected(Node node)
+    {
+        if (!Engine.IsEditorHint())
+            return false;
+        if (node == null)
+            return false;
+        var selection = EditorInterface.Singleton.GetSelection();
+        if (selection == null)
+            return false;
+
+        var selectedNodes = selection.GetSelectedNodes();
+        foreach (var selected in selectedNodes)
+            if (selected.GetParent() == node)
+                return true;
+        return false;
+    }
+
+    public bool IsNodeSelectedInEditor(Node node)
     {
         if (!Engine.IsEditorHint())
             return false;

@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cmpf70p2v54hy"]
+
+[ext_resource type="PackedScene" uid="uid://c3adjm1p8dslu" path="res://kenny-assets/kenney_modular-dungeon-kit_1.0/Models/GLB format/template-floor-detail.glb" id="1_4j240"]
+
+[sub_resource type="ConvexPolygonShape3D" id="ConvexPolygonShape3D_dt8qw"]
+points = PackedVector3Array(-2, 0, -2, -2, 0, 2, -1.2012529, 0.09998042, -0.24471414, -0.26781523, 0.2, 0.5955365, -0.9682851, 0.09998042, -1.1139389, -0.75528586, 0.04998042, -1.7415818, 2, 0, -2, -0.11276424, 0.2, 1.1750195, -1.5947533, 0.04998042, 1.1233358, 2, 0, 2, 0.31166792, 0.2, 0.440094, 1.104542, 0.09998042, -1.1871574, 1.21065, 0.09998042, -0.9064213, 1.3234143, 0.09998042, 0.46985126, 0.4667189, 0.2, 1.019577)
+
+[node name="TemplateFloor-Detail-B" unique_id=1210692547 instance=ExtResource("1_4j240")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
+
+[node name="StaticBody3D" type="StaticBody3D" parent="template-floor-detail" parent_id_path=PackedInt32Array(779383658) index="0" unique_id=1541084910]
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="template-floor-detail/StaticBody3D" index="0" unique_id=521925001]
+shape = SubResource("ConvexPolygonShape3D_dt8qw")

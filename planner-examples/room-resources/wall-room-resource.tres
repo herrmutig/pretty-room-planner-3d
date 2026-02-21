@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="PrettyRoomResource" format=3 uid="uid://lkikibj3gahl"]
+
+[ext_resource type="Script" uid="uid://cfscuu7607i0" path="res://addons/prettyroomplanner3d/resources/PrettyRoomResource.cs" id="1_phdwy"]
+
+[resource]
+script = ExtResource("1_phdwy")
+metadata/_custom_type_script = "uid://cfscuu7607i0"

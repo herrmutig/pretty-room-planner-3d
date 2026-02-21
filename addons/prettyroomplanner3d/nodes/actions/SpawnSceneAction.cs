@@ -26,7 +26,8 @@ public partial class SpawnSceneAction : PrettyPlannerAction
             {
                 var randomScene = roomResource.Scenes.PickRandom();
                 Node3D instance = (Node3D)randomScene.Instantiate();
-                instance.Transform = transform;
+                instance.Position = transform.Origin;
+                instance.Quaternion = transform.Basis.GetRotationQuaternion();
                 roomPlanner.AddSceneInstance(roomResource.Category, instance);
             }
         }
