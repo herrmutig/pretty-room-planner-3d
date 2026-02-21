@@ -1,7 +1,8 @@
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using PrettyDunGen3D;
+
+namespace PrettyRoomGen3D;
 
 [GlobalClass]
 [Tool]
@@ -9,47 +10,66 @@ public partial class SpawnSceneAction : PrettyPlannerAction
 {
     [ExportGroup("Spawn Settings")]
     [Export]
+    public PrettyPlannerTransformer OverrideTransformer { get; set; }
+
+    [Export]
     public Array<CategoryProbabilityResource> SpawnCategories { get; set; }
+
+    public override string[] _GetConfigurationWarnings()
+    {
+        if (OverrideTransformer == null && FindLastPlannerTransformer() == null)
+            return
+            [
+                $"{nameof(SpawnSceneAction)} has no transformer attached, please set an OverrideTransformer or add one as parent to this node",
+            ];
+        return [];
+    }
 
     protected override void OnExecute(
         PrettyRoomPlanner roomPlanner,
         PrettyPlannerNode previousExecuter
     )
     {
-        PrettyPlannerTransformer transformer = FindLastPlannerTransformer();
-
-        if (transformer != null)
+        PrettyPlannerTransformer transformer = OverrideTransformer;
+        if (transformer == null)
+            transformer = FindLastPlannerTransformer();
+        if (transformer == null)
         {
-            IOrderedEnumerable<CategoryProbabilityResource> sortedSpawnCategories = null;
-            if (SpawnCategories != null && SpawnCategories.Count > 0)
+            GD.PushWarning(
+                $"{nameof(SpawnSceneAction)} has no transformer attached, please set an OverrideTransformer or add one as parent to this node"
+            );
+            return;
+        }
+
+        IOrderedEnumerable<CategoryProbabilityResource> sortedSpawnCategories = null;
+        if (SpawnCategories != null && SpawnCategories.Count > 0)
+        {
+            sortedSpawnCategories = SpawnCategories
+                .Where(c => c != null)
+                .OrderBy(c => c.Probability);
+        }
+
+        string category = "";
+
+        foreach (Transform3D transform in transformer.GetTransformations())
+        {
+            if (sortedSpawnCategories != null)
+                category = RollCategory(sortedSpawnCategories);
+
+            PackedScene scene = GetRandomPackedScene(category);
+
+            if (scene == null)
             {
-                sortedSpawnCategories = SpawnCategories
-                    .Where(c => c != null)
-                    .OrderBy(c => c.Probability);
+                GD.Print(
+                    $"A RoomResource with the category '{category}' was not found. Consider adding it to the RoomResourceLibrary in the {nameof(PrettyRoomPlanner)} Node"
+                );
+                continue;
             }
 
-            string category = "";
-
-            foreach (Transform3D transform in transformer.GetTransformations())
-            {
-                if (sortedSpawnCategories != null)
-                    category = RollCategory(sortedSpawnCategories);
-
-                PackedScene scene = GetRandomPackedScene(category);
-
-                if (scene == null)
-                {
-                    GD.Print(
-                        $"A RoomResource with the category '{category}' was not found. Consider adding it to the RoomResourceLibrary in the {nameof(PrettyRoomPlanner)} Node"
-                    );
-                    continue;
-                }
-
-                Node3D instance = (Node3D)scene.Instantiate();
-                instance.Position = transform.Origin;
-                instance.Quaternion = transform.Basis.GetRotationQuaternion();
-                roomPlanner.AddSceneInstance(category, instance);
-            }
+            Node3D instance = (Node3D)scene.Instantiate();
+            instance.Position = transform.Origin;
+            instance.Quaternion = transform.Basis.GetRotationQuaternion();
+            roomPlanner.AddSceneInstance(category, instance);
         }
     }
 
@@ -99,8 +119,6 @@ public partial class SpawnSceneAction : PrettyPlannerAction
 
         float weight = totalWeight * RoomPlanner.NumberGenerator.Randf();
         float cumulative = 0;
-
-        GD.Print(weight);
 
         foreach (var probResource in spawnCategories)
         {

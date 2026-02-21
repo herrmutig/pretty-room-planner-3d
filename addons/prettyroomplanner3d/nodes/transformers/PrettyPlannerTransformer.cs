@@ -1,6 +1,6 @@
 using Godot;
 
-namespace PrettyDunGen3D;
+namespace PrettyRoomGen3D;
 
 [GlobalClass]
 public abstract partial class PrettyPlannerTransformer : PrettyPlannerNode

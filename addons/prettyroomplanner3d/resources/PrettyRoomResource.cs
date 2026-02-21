@@ -1,7 +1,7 @@
 using Godot;
 using Godot.Collections;
 
-namespace PrettyDunGen3D;
+namespace PrettyRoomGen3D;
 
 [Tool]
 [GlobalClass]

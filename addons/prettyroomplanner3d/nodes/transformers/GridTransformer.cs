@@ -3,7 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-namespace PrettyDunGen3D;
+namespace PrettyRoomGen3D;
+
+// TODO Improve FromCenter Logic -> It should start from the very center (considering of row and column count)
+// TODO -> AnchorPoint (Start Left, Right, Forward, Back, Center)
 
 [Tool]
 [GlobalClass]
@@ -14,6 +17,7 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
         FromStart,
         FromCenter,
         FromEnd,
+        InverseFromCenter,
     }
 
     [ExportGroup("Grid Settings")]
@@ -54,7 +58,7 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
     public int CellCount = -1;
 
     [Export]
-    public CellTakeStrategy CellCountStrategy { get; set; } = CellTakeStrategy.FromCenter;
+    public CellTakeStrategy CellPickStrategy { get; set; } = CellTakeStrategy.FromCenter;
 
     Draw3DMeshInstance debugDrawer;
 
@@ -62,6 +66,7 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
     {
         if (!Engine.IsEditorHint())
             return;
+
         DrawDebugInEditor();
     }
 
@@ -127,17 +132,23 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
         if (cellCount > 0)
         {
             cellCount = Mathf.Clamp(cellCount, 1, result.Count);
-            switch (CellCountStrategy)
+            switch (CellPickStrategy)
             {
                 case CellTakeStrategy.FromStart:
                     return result.Take(cellCount).ToArray();
                 case CellTakeStrategy.FromCenter:
                     return result.Skip((result.Count - cellCount) / 2).Take(cellCount).ToArray();
+                case CellTakeStrategy.InverseFromCenter:
+                {
+                    var enumeration = result.Skip(cellCount);
+                    enumeration = enumeration.Take(Mathf.Max(0, enumeration.Count() - cellCount));
+                    return enumeration.ToArray();
+                }
                 case CellTakeStrategy.FromEnd:
                     return result.TakeLast(cellCount).ToArray();
                 default:
                     throw new NotImplementedException(
-                        $"{nameof(CellCountStrategy)} is not implemented"
+                        $"{nameof(CellPickStrategy)} is not implemented"
                     );
             }
         }

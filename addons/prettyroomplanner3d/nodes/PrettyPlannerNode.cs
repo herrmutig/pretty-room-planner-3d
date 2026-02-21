@@ -1,8 +1,9 @@
 using Godot;
 using Godot.Collections;
 
-namespace PrettyDunGen3D;
+namespace PrettyRoomGen3D;
 
+[GlobalClass]
 [Tool]
 public abstract partial class PrettyPlannerNode : Node3D
 {
@@ -52,7 +53,7 @@ public abstract partial class PrettyPlannerNode : Node3D
         if (!AllowChildrenToExecute())
             return;
 
-        foreach (var plannerNode in GetPlannerNodeChildren())
+        foreach (var plannerNode in GetPlannerNodeChildren(this))
         {
             plannerNode.Execute(roomPlanner, this);
         }
@@ -70,7 +71,7 @@ public abstract partial class PrettyPlannerNode : Node3D
         if (!AllowChildrenToExecute())
             return;
 
-        foreach (var plannerNode in GetPlannerNodeChildren())
+        foreach (var plannerNode in GetPlannerNodeChildren(this))
         {
             plannerNode.PostExecute(roomPlanner, this);
         }
@@ -92,10 +93,10 @@ public abstract partial class PrettyPlannerNode : Node3D
         PrettyPlannerNode previousExecuter
     ) { }
 
-    protected Array<PrettyPlannerNode> GetPlannerNodeChildren()
+    protected Array<PrettyPlannerNode> GetPlannerNodeChildren(PrettyPlannerNode root)
     {
         Array<PrettyPlannerNode> plannerNodes = new();
-        foreach (var child in GetChildren())
+        foreach (var child in root.GetChildren())
         {
             if (child is PrettyPlannerNode plannerNode)
             {
@@ -116,13 +117,13 @@ public abstract partial class PrettyPlannerNode : Node3D
     /// </returns>
     protected PrettyPlannerTransformer FindLastPlannerTransformer()
     {
-        PrettyPlannerNode current = PreviousExecuter;
+        Node current = GetParent();
         while (current != null)
         {
             if (current is PrettyPlannerTransformer)
                 return (PrettyPlannerTransformer)current;
 
-            current = current.PreviousExecuter;
+            current = current.GetParent();
         }
 
         return null;

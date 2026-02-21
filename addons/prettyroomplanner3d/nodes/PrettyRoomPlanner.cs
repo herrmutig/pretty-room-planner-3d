@@ -2,16 +2,9 @@ using System.Linq;
 using Godot;
 using Godot.Collections;
 
-namespace PrettyDunGen3D;
+namespace PrettyRoomGen3D;
 
-public enum PlannerConnection
-{
-    Any,
-    Forward,
-    Left,
-    Right,
-    Back,
-}
+// TODO ADD DOCUMENTATION FOR EVERY CLASS
 
 [GlobalClass]
 [Tool]
