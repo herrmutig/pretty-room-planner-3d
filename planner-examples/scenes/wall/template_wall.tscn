@@ -1,0 +1,6 @@
+[gd_scene format=3 uid="uid://qrau0nrr117h"]
+
+[ext_resource type="PackedScene" uid="uid://d0hs6xg2qend5" path="res://kenny-assets/kenney_modular-dungeon-kit_1.0/Models/GLB format/template-wall.glb" id="1_vl2uq"]
+
+[node name="TemplateWall" unique_id=2043744270 instance=ExtResource("1_vl2uq")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)

@@ -5,11 +5,13 @@
 [ext_resource type="Resource" uid="uid://b7bccjfkwqhmp" path="res://planner-examples/room-resources/floor-room-resource-detail.tres" id="3_jlqqy"]
 [ext_resource type="Resource" uid="uid://buqw60cv14k5" path="res://planner-examples/room-resources/floor-room-resource.tres" id="4_f5rei"]
 [ext_resource type="Script" uid="uid://c4t6gp6q0ch1k" path="res://addons/prettyroomplanner3d/nodes/PrettyPlannerRule.cs" id="4_jlqqy"]
+[ext_resource type="Resource" uid="uid://lkikibj3gahl" path="res://planner-examples/room-resources/wall-room-resource.tres" id="5_7obxw"]
 [ext_resource type="Script" uid="uid://ctbxe5q7nxbur" path="res://addons/prettyroomplanner3d/nodes/transformers/GridTransformer.cs" id="5_sv6ec"]
 [ext_resource type="Script" uid="uid://cp0ihok8hchlf" path="res://addons/prettyroomplanner3d/resources/CategoryProbabilityResource.cs" id="6_7obxw"]
 [ext_resource type="Script" uid="uid://7vl4td36at11" path="res://addons/prettyroomplanner3d/nodes/actions/SpawnSceneAction.cs" id="6_eju6n"]
-[ext_resource type="PackedScene" uid="uid://d4cvbkjs0gfm3" path="res://planner-examples/scenes/floors/template_floor-detail-a.tscn" id="7_7obxw"]
-[ext_resource type="PackedScene" uid="uid://cmpf70p2v54hy" path="res://planner-examples/scenes/floors/template_floor-detail-b.tscn" id="8_7obxw"]
+[ext_resource type="Script" uid="uid://dgxtjb7sglmaq" path="res://addons/prettyroomplanner3d/nodes/transformers/AdditiveTransformer.cs" id="10_jjxvb"]
+[ext_resource type="PackedScene" uid="uid://f4nw01pby5v2" path="res://planner-examples/scenes/floors/template_floor.tscn" id="10_vvuc5"]
+[ext_resource type="PackedScene" uid="uid://qrau0nrr117h" path="res://planner-examples/scenes/wall/template_wall.tscn" id="11_jjxvb"]
 
 [sub_resource type="Resource" id="Resource_re8vx"]
 resource_name = "Floor Probability"
@@ -25,16 +27,24 @@ Category = "floor-detail"
 Probability = 0.1
 metadata/_custom_type_script = "uid://cp0ihok8hchlf"
 
+[sub_resource type="Resource" id="Resource_7obxw"]
+resource_name = "Wall"
+script = ExtResource("6_7obxw")
+Category = "wall"
+metadata/_custom_type_script = "uid://cp0ihok8hchlf"
+
 [node name="PrettyRoomPlanner3D-Example-1" type="Node3D" unique_id=222939185]
 script = ExtResource("1_bnlf3")
-Size = Vector3(8, 2, 4)
+Size = Vector3(8, 2, 6)
 Seed = 14
 RoomResourceLibrary = Dictionary[String, ExtResource("2_l6ipk")]({
 "floor": ExtResource("4_f5rei"),
-"floor-detail": ExtResource("3_jlqqy")
+"floor-detail": ExtResource("3_jlqqy"),
+"wall": ExtResource("5_7obxw")
 })
 SceneInstanceDictionary = Dictionary[String, Array]({
-"floor": Array[NodePath]([NodePath("SpawnContainer (Generated)/floor/TemplateFloor-Detail-A"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor-Detail-B"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor-Detail-A2"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor-Detail-B2"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor-Detail-B3"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor-Detail-A3"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor-Detail-B4"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor-Detail-B5")])
+"floor": Array[NodePath]([NodePath("SpawnContainer (Generated)/floor/TemplateFloor"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor2"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor3"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor4"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor5"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor6"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor7"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor8"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor9"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor10"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor11"), NodePath("SpawnContainer (Generated)/floor/TemplateFloor12")]),
+"wall": Array[NodePath]([NodePath("SpawnContainer (Generated)/wall/TemplateWall"), NodePath("SpawnContainer (Generated)/wall/TemplateWall2"), NodePath("SpawnContainer (Generated)/wall/TemplateWall3"), NodePath("SpawnContainer (Generated)/wall/TemplateWall4"), NodePath("SpawnContainer (Generated)/wall/TemplateWall5"), NodePath("SpawnContainer (Generated)/wall/TemplateWall6")])
 })
 
 [node name="FloorRule" type="Node3D" parent="." unique_id=23287927]
@@ -53,38 +63,140 @@ script = ExtResource("6_eju6n")
 SpawnCategories = Array[Object]([SubResource("Resource_re8vx"), SubResource("Resource_f5rei")])
 metadata/_custom_type_script = "uid://7vl4td36at11"
 
-[node name="SpawnContainer (Generated)" type="Node3D" parent="." unique_id=1110939030]
+[node name="WallRule" type="Node3D" parent="." unique_id=560640949]
+script = ExtResource("4_jlqqy")
+metadata/_custom_type_script = "uid://c4t6gp6q0ch1k"
 
-[node name="floor" type="Node3D" parent="SpawnContainer (Generated)" unique_id=1303040446]
+[node name="AdditiveTransformer" type="Node3D" parent="WallRule" unique_id=174983944]
+script = ExtResource("10_jjxvb")
+metadata/_custom_type_script = "uid://dgxtjb7sglmaq"
 
-[node name="TemplateFloor-Detail-A" parent="SpawnContainer (Generated)/floor" unique_id=1661077775 instance=ExtResource("7_7obxw")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -3, -1, -1)
+[node name="GridTransformer-Front" type="Node3D" parent="WallRule/AdditiveTransformer" unique_id=799956790]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+script = ExtResource("5_sv6ec")
+MaxRows = 1.0
+InvertRowOrder = true
+CellSizeX = 2.0
+CellSizeZ = 2.0
+CellCount = 1
+CellPickStrategy = 3
+metadata/_custom_type_script = "uid://ctbxe5q7nxbur"
+
+[node name="GridTransformer-Back" type="Node3D" parent="WallRule/AdditiveTransformer" unique_id=28305467]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, -1)
+script = ExtResource("5_sv6ec")
+MaxRows = 1.0
+CellSizeX = 2.0
+CellSizeZ = 2.0
+CellRotation = Vector3(0, 180, 0)
+CellCount = 1
+CellPickStrategy = 3
+metadata/_custom_type_script = "uid://ctbxe5q7nxbur"
+
+[node name="GridTransformer-Left" type="Node3D" parent="WallRule/AdditiveTransformer" unique_id=1660483582]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1, -1, 0)
+script = ExtResource("5_sv6ec")
+MaxColumns = 1.0
+CellSizeX = 2.0
+CellSizeZ = 2.0
+CellRotation = Vector3(0, 270, 0)
+CellCount = 1
+CellPickStrategy = 3
+metadata/_custom_type_script = "uid://ctbxe5q7nxbur"
+
+[node name="GridTransformer-Right" type="Node3D" parent="WallRule/AdditiveTransformer" unique_id=109485202]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -1, 0)
+script = ExtResource("5_sv6ec")
+MaxColumns = 1.0
+InvertColumnOrder = true
+CellSizeX = 2.0
+CellSizeZ = 2.0
+CellRotation = Vector3(0, 90, 0)
+CellCount = 1
+CellPickStrategy = 3
+metadata/_custom_type_script = "uid://ctbxe5q7nxbur"
+
+[node name="SpawnSceneAction" type="Node3D" parent="WallRule" unique_id=1525881207 node_paths=PackedStringArray("OverrideTransformer")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 1)
+script = ExtResource("6_eju6n")
+OverrideTransformer = NodePath("../AdditiveTransformer")
+SpawnCategories = [SubResource("Resource_7obxw")]
+metadata/_custom_type_script = "uid://7vl4td36at11"
+
+[node name="SpawnContainer (Generated)" type="Node3D" parent="." unique_id=199320984]
+
+[node name="floor" type="Node3D" parent="SpawnContainer (Generated)" unique_id=1559059219]
+
+[node name="TemplateFloor" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=863122491 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -3, -1, -2)
 metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
 
-[node name="TemplateFloor-Detail-B" parent="SpawnContainer (Generated)/floor" unique_id=1210692547 instance=ExtResource("8_7obxw")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -3, -1, 1)
+[node name="TemplateFloor2" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=1940233224 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -3, -1, 0)
 metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
 
-[node name="TemplateFloor-Detail-A2" parent="SpawnContainer (Generated)/floor" unique_id=1666176125 instance=ExtResource("7_7obxw")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1, -1, -1)
+[node name="TemplateFloor3" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=1932186483 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -3, -1, 2)
 metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
 
-[node name="TemplateFloor-Detail-B2" parent="SpawnContainer (Generated)/floor" unique_id=1905106909 instance=ExtResource("8_7obxw")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1, -1, 1)
+[node name="TemplateFloor4" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=145627034 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1, -1, -2)
 metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
 
-[node name="TemplateFloor-Detail-B3" parent="SpawnContainer (Generated)/floor" unique_id=814596236 instance=ExtResource("8_7obxw")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1, -1, -1)
+[node name="TemplateFloor5" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=373462769 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1, -1, 0)
 metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
 
-[node name="TemplateFloor-Detail-A3" parent="SpawnContainer (Generated)/floor" unique_id=1840354472 instance=ExtResource("7_7obxw")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1, -1, 1)
+[node name="TemplateFloor6" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=1096675491 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1, -1, 2)
 metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
 
-[node name="TemplateFloor-Detail-B4" parent="SpawnContainer (Generated)/floor" unique_id=718670379 instance=ExtResource("8_7obxw")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3, -1, -1)
+[node name="TemplateFloor7" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=354891929 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1, -1, -2)
 metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
 
-[node name="TemplateFloor-Detail-B5" parent="SpawnContainer (Generated)/floor" unique_id=741435896 instance=ExtResource("8_7obxw")]
-transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3, -1, 1)
+[node name="TemplateFloor8" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=553146403 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1, -1, 0)
+metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
+
+[node name="TemplateFloor9" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=1590231845 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1, -1, 2)
+metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
+
+[node name="TemplateFloor10" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=773394557 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3, -1, -2)
+metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
+
+[node name="TemplateFloor11" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=429410372 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3, -1, 0)
+metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
+
+[node name="TemplateFloor12" type="Node3D" parent="SpawnContainer (Generated)/floor" unique_id=869250303 instance=ExtResource("10_vvuc5")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 3, -1, 2)
+metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
+
+[node name="wall" type="Node3D" parent="SpawnContainer (Generated)" unique_id=911322329]
+
+[node name="TemplateWall" type="Node3D" parent="SpawnContainer (Generated)/wall" unique_id=2043744270 instance=ExtResource("11_jjxvb")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, -1, -1, 3)
+metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
+
+[node name="TemplateWall2" type="Node3D" parent="SpawnContainer (Generated)/wall" unique_id=189275852 instance=ExtResource("11_jjxvb")]
+transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 1, -1, 3)
+metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
+
+[node name="TemplateWall3" type="Node3D" parent="SpawnContainer (Generated)/wall" unique_id=609410379 instance=ExtResource("11_jjxvb")]
+transform = Transform3D(-0.5, 0, -4.371139e-08, 0, 0.5, 0, 4.371139e-08, 0, -0.5, -1, -1, -3)
+metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
+
+[node name="TemplateWall4" type="Node3D" parent="SpawnContainer (Generated)/wall" unique_id=1644432132 instance=ExtResource("11_jjxvb")]
+transform = Transform3D(-0.5, 0, -4.371139e-08, 0, 0.5, 0, 4.371139e-08, 0, -0.5, 1, -1, -3)
+metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
+
+[node name="TemplateWall5" type="Node3D" parent="SpawnContainer (Generated)/wall" unique_id=557975855 instance=ExtResource("11_jjxvb")]
+transform = Transform3D(0, 0, -0.5, 0, 0.5, 0, 0.5, 0, 0, -4, -1, 0)
+metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
+
+[node name="TemplateWall6" type="Node3D" parent="SpawnContainer (Generated)/wall" unique_id=1887186332 instance=ExtResource("11_jjxvb")]
+transform = Transform3D(0, 0, 0.5, 0, 0.5, 0, -0.5, 0, 0, 4, -1, 0)
 metadata/prp3D_planner_nodepath = NodePath("/root/@EditorNode@18094/@Panel@14/@VBoxContainer@15/DockHSplitMain/@VBoxContainer@28/DockVSplitCenter/@VSplitContainer@70/@VBoxContainer@71/@EditorMainScreen@125/MainScreen/@CanvasItemEditor@9318/@VSplitContainer@9101/@HSplitContainer@9103/@HSplitContainer@9105/@Control@9106/@SubViewportContainer@9107/@SubViewport@9108/PrettyRoomPlanner3D-Example-1")
