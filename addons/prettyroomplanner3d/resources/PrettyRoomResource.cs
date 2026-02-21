@@ -8,9 +8,6 @@ namespace PrettyDunGen3D;
 public partial class PrettyRoomResource : Resource
 {
     [Export]
-    public string Category { get; set; } = "wall";
-
-    [Export]
     public Array<PackedScene> Scenes
     {
         get => scenes;
