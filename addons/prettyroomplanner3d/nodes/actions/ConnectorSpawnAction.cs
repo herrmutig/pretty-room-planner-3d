@@ -6,7 +6,7 @@ using PrettyDunGen3D;
 public partial class ConnectorSpawnAction : PrettyPlannerAction
 {
     [Export]
-    public string DeleteRoomResourcesWithCategory { get; set; } = "wall";
+    public string DeleteRoomResourcesWithCategory { get; set; } = "default";
 
     [Export(PropertyHint.Range, "0.01,0.25,0.01")]
     public float Padding { get; set; } = 0.05f;

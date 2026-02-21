@@ -1,0 +1,10 @@
+[gd_resource type="Resource" script_class="PrettyRoomResource" format=3 uid="uid://b7bccjfkwqhmp"]
+
+[ext_resource type="Script" uid="uid://cfscuu7607i0" path="res://addons/prettyroomplanner3d/resources/PrettyRoomResource.cs" id="1_a0cut"]
+[ext_resource type="PackedScene" uid="uid://d4cvbkjs0gfm3" path="res://planner-examples/scenes/floors/template_floor-detail-a.tscn" id="1_kh2df"]
+[ext_resource type="PackedScene" uid="uid://cmpf70p2v54hy" path="res://planner-examples/scenes/floors/template_floor-detail-b.tscn" id="2_w1fuu"]
+
+[resource]
+script = ExtResource("1_a0cut")
+Scenes = Array[PackedScene]([ExtResource("1_kh2df"), ExtResource("2_w1fuu")])
+metadata/_custom_type_script = "uid://cfscuu7607i0"

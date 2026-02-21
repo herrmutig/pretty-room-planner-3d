@@ -4,7 +4,6 @@ using Godot.Collections;
 
 namespace PrettyDunGen3D;
 
-// TODO Make it seedable..
 public enum PlannerConnection
 {
     Any,
@@ -33,7 +32,13 @@ public partial class PrettyRoomPlanner : Node3D
     public bool GenerateOnReady { get; set; } = false;
 
     [Export]
-    public Array<PrettyRoomResource> RoomResources { get; set; } = new();
+    public ulong Seed { get; set; } = 0;
+
+    [Export]
+    public bool RandomizeSeed { get; set; } = false;
+
+    [Export]
+    public Dictionary<string, PrettyRoomResource> RoomResourceLibrary { get; set; } = new();
 
     [ExportGroup("Generation")]
     [ExportToolButton("Generate!")]
@@ -44,10 +49,11 @@ public partial class PrettyRoomPlanner : Node3D
 
     [ExportGroup("Debugging")]
     [Export]
-    Dictionary<string, Array<NodePath>> SceneInstanceDictionary = new();
+    Dictionary<string, Array<NodePath>> SceneInstanceDictionary { get; set; } = new();
 
     Vector3 size = Vector3.One * 2f;
     Draw3DMeshInstance debugDrawer;
+    public readonly RandomNumberGenerator NumberGenerator = new RandomNumberGenerator();
 
     public override void _Ready()
     {
@@ -70,6 +76,12 @@ public partial class PrettyRoomPlanner : Node3D
     public void Generate()
     {
         FreeGeneration();
+        if (RandomizeSeed)
+        {
+            Seed = NumberGenerator.Randi();
+        }
+
+        NumberGenerator.Seed = Seed;
 
         if (SceneInstanceDictionary == null)
             SceneInstanceDictionary = new();
@@ -106,19 +118,6 @@ public partial class PrettyRoomPlanner : Node3D
         {
             EditorInterface.Singleton.MarkSceneAsUnsaved();
         }
-    }
-
-    public PrettyRoomResource GetRandomRoomResource(string roomResourceCategory = "")
-    {
-        if (string.IsNullOrWhiteSpace(roomResourceCategory))
-            return RoomResources.PickRandom();
-
-        Array<PrettyRoomResource> filtered =
-        [
-            .. RoomResources.Where((rr) => rr.Category == roomResourceCategory),
-        ];
-
-        return filtered.PickRandom();
     }
 
     public Node3D[] GetRoomResourceInstancesByCategory(string category)
@@ -218,6 +217,9 @@ public partial class PrettyRoomPlanner : Node3D
         var spawnContainer = GetOrCreateSpawnContainer();
         var categoryNode3D = (Node3D)spawnContainer.GetNodeOrNull(category);
 
+        if (string.IsNullOrWhiteSpace(category))
+            return spawnContainer;
+
         if (categoryNode3D == null)
         {
             categoryNode3D = new Node3D { Name = category };
@@ -250,8 +252,8 @@ public partial class PrettyRoomPlanner : Node3D
         System.Collections.Generic.List<string> failures = [];
         if (Size.X < 0 || Size.Y < 0 || Size.Z < 0)
             failures.Add($"Cancelled Generation: Can not generate a room with Size: {Size}");
-        if (RoomResources.Count < 1)
-            failures.Add("No RoomResources specified. RoomPlanner can not spawn any geometry!");
+        if (RoomResourceLibrary.Count < 1)
+            failures.Add("RoomResourceLibrary is empty. RoomPlanner can not spawn any geometry!");
 
         foreach (var child in GetChildren())
             if (child is PrettyPlannerNode && child is not PrettyPlannerRule)
