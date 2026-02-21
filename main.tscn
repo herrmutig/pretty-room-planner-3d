@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://cig1f0k4n37vh"]
+
+[ext_resource type="Script" uid="uid://crjay0yb1gdv2" path="res://addons/prettyroomplanner3d/nodes/PrettyRoomPlanner.cs" id="1_0xm2m"]
+[ext_resource type="Script" uid="uid://cfscuu7607i0" path="res://addons/prettyroomplanner3d/resources/PrettyRoomResource.cs" id="2_h2yge"]
+[ext_resource type="Script" uid="uid://ctbxe5q7nxbur" path="res://addons/prettyroomplanner3d/nodes/transformers/GridTransformer.cs" id="3_1bvp3"]
+[ext_resource type="Script" uid="uid://c4t6gp6q0ch1k" path="res://addons/prettyroomplanner3d/nodes/PrettyPlannerRule.cs" id="3_h2yge"]
+
+[sub_resource type="Resource" id="Resource_r3fl7"]
+script = ExtResource("2_h2yge")
+metadata/_custom_type_script = "uid://cfscuu7607i0"
+
+[node name="main" type="Node3D" unique_id=2109556414]
+
+[node name="PrettyRoomPlanner" type="Node3D" parent="." unique_id=682444954]
+script = ExtResource("1_0xm2m")
+Size = Vector3(3, 1, 3)
+RoomResources = Array[ExtResource("2_h2yge")]([SubResource("Resource_r3fl7")])
+metadata/_custom_type_script = "uid://crjay0yb1gdv2"
+
+[node name="PrettyPlannerRule" type="Node3D" parent="PrettyRoomPlanner" unique_id=1583308388]
+script = ExtResource("3_h2yge")
+metadata/_custom_type_script = "uid://c4t6gp6q0ch1k"
+
+[node name="GridTransformer" type="Node3D" parent="PrettyRoomPlanner/PrettyPlannerRule" unique_id=655978884]
+script = ExtResource("3_1bvp3")
+metadata/_custom_type_script = "uid://ctbxe5q7nxbur"
