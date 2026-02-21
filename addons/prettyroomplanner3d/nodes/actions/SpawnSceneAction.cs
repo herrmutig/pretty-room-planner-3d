@@ -119,8 +119,6 @@ public partial class SpawnSceneAction : PrettyPlannerAction
         float weight = totalWeight * RoomPlanner.NumberGenerator.Randf();
         float cumulative = 0;
 
-        GD.Print(weight);
-
         foreach (var probResource in spawnCategories)
         {
             if (probResource == null)

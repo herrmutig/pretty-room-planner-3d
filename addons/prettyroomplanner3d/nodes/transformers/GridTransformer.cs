@@ -5,6 +5,7 @@ using Godot;
 
 namespace PrettyDunGen3D;
 
+// TODO Improve FromCenter Logic -> It should start from the very center (considering of row and column count)
 [Tool]
 [GlobalClass]
 public sealed partial class GridTransformer : PrettyPlannerTransformer

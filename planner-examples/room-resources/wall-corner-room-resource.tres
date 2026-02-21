@@ -1,0 +1,9 @@
+[gd_resource type="Resource" script_class="PrettyRoomResource" format=3 uid="uid://b22r4gf0emc20"]
+
+[ext_resource type="PackedScene" uid="uid://c8hs1l6ne62bi" path="res://planner-examples/scenes/wall/template_corner.tscn" id="1_2rl44"]
+[ext_resource type="Script" uid="uid://cfscuu7607i0" path="res://addons/prettyroomplanner3d/resources/PrettyRoomResource.cs" id="2_x1kca"]
+
+[resource]
+script = ExtResource("2_x1kca")
+Scenes = Array[PackedScene]([ExtResource("1_2rl44")])
+metadata/_custom_type_script = "uid://cfscuu7607i0"
