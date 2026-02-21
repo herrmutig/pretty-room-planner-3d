@@ -1,5 +1,6 @@
 using Godot;
-using PrettyDunGen3D;
+
+namespace PrettyRoomGen3D;
 
 /// <summary>
 /// Base type for planner nodes that represent conditional logic.

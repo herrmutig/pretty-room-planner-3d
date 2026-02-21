@@ -1,11 +1,12 @@
 using System.Collections.Generic;
 using Godot;
-using PrettyDunGen3D;
+
+namespace PrettyRoomGen3D;
 
 // TODO: Create an alternative Rule that checks for Transform Positions instead of finding a collision and removes an already spawned node
 [Tool]
 [GlobalClass]
-public partial class RemoveOverlappingSceneAction : PrettyPlannerAction
+public sealed partial class RemoveOverlappingSceneAction : PrettyPlannerAction
 {
     [Export]
     public string DeleteRoomResourcesWithCategory { get; set; } = "default";
@@ -151,7 +152,6 @@ public partial class RemoveOverlappingSceneAction : PrettyPlannerAction
         if (debugDrawer == null)
         {
             debugDrawer = new Draw3DMeshInstance();
-            AddChild(debugDrawer, false, InternalMode.Front);
         }
     }
 }

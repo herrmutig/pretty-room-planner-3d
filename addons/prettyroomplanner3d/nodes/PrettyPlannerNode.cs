@@ -1,8 +1,9 @@
 using Godot;
 using Godot.Collections;
 
-namespace PrettyDunGen3D;
+namespace PrettyRoomGen3D;
 
+[GlobalClass]
 [Tool]
 public abstract partial class PrettyPlannerNode : Node3D
 {

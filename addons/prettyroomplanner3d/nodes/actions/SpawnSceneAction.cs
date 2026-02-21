@@ -1,7 +1,8 @@
 using System.Linq;
 using Godot;
 using Godot.Collections;
-using PrettyDunGen3D;
+
+namespace PrettyRoomGen3D;
 
 [GlobalClass]
 [Tool]

@@ -1,7 +1,9 @@
 using Godot;
 
-[GlobalClass]
+namespace PrettyRoomGen3D;
+
 [Tool]
+[GlobalClass]
 public partial class HasMetaDataConditional : PrettyPlannerConditional
 {
     [Export]

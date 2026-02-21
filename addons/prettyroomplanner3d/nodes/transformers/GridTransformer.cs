@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using Godot;
 
-namespace PrettyDunGen3D;
+namespace PrettyRoomGen3D;
 
 // TODO Improve FromCenter Logic -> It should start from the very center (considering of row and column count)
+// TODO -> AnchorPoint (Start Left, Right, Forward, Back, Center)
+
 [Tool]
 [GlobalClass]
 public sealed partial class GridTransformer : PrettyPlannerTransformer
@@ -64,6 +66,7 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
     {
         if (!Engine.IsEditorHint())
             return;
+
         DrawDebugInEditor();
     }
 

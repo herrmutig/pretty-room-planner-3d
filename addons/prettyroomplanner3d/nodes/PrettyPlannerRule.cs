@@ -1,6 +1,6 @@
 using Godot;
 
-namespace PrettyDunGen3D;
+namespace PrettyRoomGen3D;
 
 [GlobalClass]
 [Tool]
