@@ -1,3 +1,5 @@
 {
-    "godotTools.editorPath.godot4": "g:\\Windows\\Programme\\Godot\\Godot_v4.6.1-stable_mono_win64.exe"
+    "files.exclude": {
+        "**/*.uid": true
+    }
 }
