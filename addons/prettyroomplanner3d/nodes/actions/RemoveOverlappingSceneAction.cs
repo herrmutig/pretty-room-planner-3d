@@ -9,6 +9,9 @@ namespace PrettyRoomGen3D;
 public sealed partial class RemoveOverlappingSceneAction : PrettyPlannerAction
 {
     [Export]
+    public PrettyPlannerTransformer OverrideTransformer { get; set; }
+
+    [Export]
     public string DeleteRoomResourcesWithCategory { get; set; } = "default";
 
     [Export]
@@ -35,7 +38,17 @@ public sealed partial class RemoveOverlappingSceneAction : PrettyPlannerAction
         PrettyPlannerNode previousExecuter
     )
     {
-        PrettyPlannerTransformer transformer = FindLastPlannerTransformer();
+        PrettyPlannerTransformer transformer = OverrideTransformer;
+        if (transformer == null)
+            transformer = FindLastPlannerTransformer();
+        if (transformer == null)
+        {
+            GD.PushWarning(
+                $"{nameof(RemoveOverlappingSceneAction)} has no transformer attached, please set an OverrideTransformer or add one as parent to this node"
+            );
+            return;
+        }
+
         if (transformer != null)
         {
             if (!Engine.IsInPhysicsFrame())
