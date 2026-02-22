@@ -11,7 +11,9 @@ namespace PrettyRoomGen3D;
 public partial class PrettyRoomPlanner : Node3D
 {
     public const string SPAWN_CONTAINER_NAME = "SpawnContainer (Generated)";
-    public const string METADATA_ROOMPLANNER_NODEPATH = "prp3D_planner_nodepath";
+    public const string METADATA_PLANNER_NODEPATH = "pplanner3d_nodepath";
+
+    public const string METADATA_PLANNER_ROOMRESOURCE_CATEGORY = "pplanner_roomresource_category";
 
     [ExportGroup("General")]
     [Export]
@@ -151,7 +153,8 @@ public partial class PrettyRoomPlanner : Node3D
 
     public void AddSceneInstance(string category, Node instance)
     {
-        instance.SetMeta(METADATA_ROOMPLANNER_NODEPATH, GetPath());
+        instance.SetMeta(METADATA_PLANNER_NODEPATH, GetPath());
+        instance.SetMeta(METADATA_PLANNER_ROOMRESOURCE_CATEGORY, category);
 
         if (!instance.IsInsideTree())
         {

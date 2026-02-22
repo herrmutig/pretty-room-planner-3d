@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://pm72rg4w1a8f"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_2ynp4"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ynp4"]
+shading_mode = 0
+albedo_color = Color(0.21738806, 0.55880463, 0, 1)
+
+[node name="Sphere" type="MeshInstance3D" unique_id=471678490]
+mesh = SubResource("SphereMesh_2ynp4")
+surface_material_override/0 = SubResource("StandardMaterial3D_2ynp4")

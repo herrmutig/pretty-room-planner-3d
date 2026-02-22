@@ -1,14 +1,11 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using Godot;
 
 namespace PrettyRoomGen3D;
 
-// TODO Improve FromCenter Logic -> It should start from the very center (considering of row and column count)
-// TODO -> AnchorPoint (Start Left, Right, Forward, Back, Center)
-
+// TODO Allow grid to rotate...
 [Tool]
 [GlobalClass]
 public sealed partial class GridTransformer : PrettyPlannerTransformer
@@ -22,9 +19,6 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
     }
 
     [ExportGroup("Grid Settings")]
-    [Export]
-    public AnchorStrategy Anchor { get; set; }
-
     [Export(PropertyHint.Range, "0.1,1,")]
     public float RelativeSizeX { get; set; } = 1f;
 
@@ -132,11 +126,6 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
         }
 
         return result.ToArray();
-        // Filters result dependent on CellCount and Strategy
-
-        /*  */
-
-        //return result.ToArray();
     }
 
     private List<Transform3D> BuildGrid(Vector2I iterations, int xLimit, int yLimit)

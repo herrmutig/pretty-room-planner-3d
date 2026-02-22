@@ -1,0 +1,11 @@
+[gd_scene format=3 uid="uid://ch4rpesmiq0d"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_gygu5"]
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_gygu5"]
+shading_mode = 0
+albedo_color = Color(0.16917744, 0.19898638, 1, 1)
+
+[node name="Cylinder" type="MeshInstance3D" unique_id=471678490]
+mesh = SubResource("CylinderMesh_gygu5")
+surface_material_override/0 = SubResource("StandardMaterial3D_gygu5")

@@ -2,57 +2,94 @@
 
 [ext_resource type="Script" uid="uid://crjay0yb1gdv2" path="res://addons/prettyroomplanner3d/nodes/PrettyRoomPlanner.cs" id="1_dwhie"]
 [ext_resource type="Script" uid="uid://cfscuu7607i0" path="res://addons/prettyroomplanner3d/resources/PrettyRoomResource.cs" id="2_8u5ci"]
-[ext_resource type="Resource" uid="uid://buqw60cv14k5" path="res://planner-examples/room-resources/floor-room-resource.tres" id="3_ewpy5"]
-[ext_resource type="Resource" uid="uid://b7bccjfkwqhmp" path="res://planner-examples/room-resources/floor-room-resource-detail.tres" id="4_w3liu"]
-[ext_resource type="Resource" uid="uid://lkikibj3gahl" path="res://planner-examples/room-resources/wall-room-resource.tres" id="5_tcuk0"]
-[ext_resource type="Resource" uid="uid://b22r4gf0emc20" path="res://planner-examples/room-resources/wall-corner-room-resource.tres" id="6_cpqwt"]
 [ext_resource type="Script" uid="uid://c4t6gp6q0ch1k" path="res://addons/prettyroomplanner3d/nodes/PrettyPlannerRule.cs" id="7_dmvxt"]
 [ext_resource type="Script" uid="uid://ctbxe5q7nxbur" path="res://addons/prettyroomplanner3d/nodes/transformers/GridTransformer.cs" id="8_7sfgk"]
 [ext_resource type="Script" uid="uid://7vl4td36at11" path="res://addons/prettyroomplanner3d/nodes/actions/SpawnSceneAction.cs" id="9_s2hbb"]
-[ext_resource type="Script" uid="uid://cp0ihok8hchlf" path="res://addons/prettyroomplanner3d/resources/CategoryProbabilityResource.cs" id="10_mjxel"]
+[ext_resource type="PackedScene" uid="uid://xs736jgmvefe" path="res://planner-examples/scenes/primitives/cube.tscn" id="10_d7vfn"]
+[ext_resource type="Script" uid="uid://ccifd0c6v2hdq" path="res://addons/prettyroomplanner3d/nodes/actions/SequentialSpawnAction.cs" id="10_kt27n"]
+[ext_resource type="PackedScene" uid="uid://ch4rpesmiq0d" path="res://planner-examples/scenes/primitives/cylinder.tscn" id="11_8jodk"]
+[ext_resource type="PackedScene" uid="uid://pm72rg4w1a8f" path="res://planner-examples/scenes/primitives/sphere.tscn" id="12_8jodk"]
 
-[sub_resource type="Resource" id="Resource_re8vx"]
-resource_name = "Floor Probability"
-script = ExtResource("10_mjxel")
-Category = "floor"
-Probability = 0.75
-metadata/_custom_type_script = "uid://cp0ihok8hchlf"
+[sub_resource type="Resource" id="Resource_kt27n"]
+script = ExtResource("2_8u5ci")
+Scenes = Array[PackedScene]([ExtResource("12_8jodk")])
+metadata/_custom_type_script = "uid://cfscuu7607i0"
 
-[sub_resource type="Resource" id="Resource_f5rei"]
-resource_name = "Floor-Detail Probability"
-script = ExtResource("10_mjxel")
-Category = "floor-detail"
-Probability = 0.1
-metadata/_custom_type_script = "uid://cp0ihok8hchlf"
+[sub_resource type="Resource" id="Resource_vsmcr"]
+script = ExtResource("2_8u5ci")
+Scenes = Array[PackedScene]([ExtResource("10_d7vfn"), ExtResource("11_8jodk")])
+metadata/_custom_type_script = "uid://cfscuu7607i0"
 
-[node name="PrettyRoomPlanner3D-Example-2" type="Node3D" unique_id=222939185]
+[sub_resource type="Resource" id="Resource_dwhie"]
+script = ExtResource("2_8u5ci")
+Scenes = Array[PackedScene]([ExtResource("12_8jodk")])
+metadata/_custom_type_script = "uid://cfscuu7607i0"
+
+[sub_resource type="Resource" id="Resource_o2xyl"]
+script = ExtResource("2_8u5ci")
+Scenes = Array[PackedScene]([ExtResource("10_d7vfn"), ExtResource("11_8jodk")])
+metadata/_custom_type_script = "uid://cfscuu7607i0"
+
+[node name="Example-2" type="Node3D" unique_id=798810838]
+
+[node name="PrettyRoomPlanner3D-ProbabilitySpawn" type="Node3D" parent="." unique_id=222939185]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.6077378, 0, 0)
 script = ExtResource("1_dwhie")
-Size = Vector3(9, 2, 7)
+Size = Vector3(12, 2, 12)
 GenerateOnReady = true
 Seed = 14
 RoomResourceLibrary = Dictionary[String, ExtResource("2_8u5ci")]({
-"floor": ExtResource("3_ewpy5"),
-"floor-detail": ExtResource("4_w3liu"),
-"wall": ExtResource("5_tcuk0"),
-"wall-corner": ExtResource("6_cpqwt")
+"another": SubResource("Resource_kt27n"),
+"default": SubResource("Resource_vsmcr")
 })
 SceneInstanceDictionary = Dictionary[String, Array]({
-"floor": Array[NodePath]([NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath("")]),
-"wall": Array[NodePath]([NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath("")]),
-"wall-corner": Array[NodePath]([NodePath(""), NodePath(""), NodePath(""), NodePath("")])
+"": Array[NodePath]([NodePath("SpawnContainer (Generated)/Cube"), NodePath("SpawnContainer (Generated)/Sphere"), NodePath("SpawnContainer (Generated)/Cylinder"), NodePath("SpawnContainer (Generated)/Cylinder2"), NodePath("SpawnContainer (Generated)/Cube2"), NodePath("SpawnContainer (Generated)/Sphere2"), NodePath("SpawnContainer (Generated)/Sphere3"), NodePath("SpawnContainer (Generated)/Cube3"), NodePath("SpawnContainer (Generated)/Cylinder3"), NodePath("SpawnContainer (Generated)/Cube4"), NodePath("SpawnContainer (Generated)/Sphere4"), NodePath("SpawnContainer (Generated)/Cylinder4"), NodePath("SpawnContainer (Generated)/Cube5"), NodePath("SpawnContainer (Generated)/Sphere5"), NodePath("SpawnContainer (Generated)/Cube6"), NodePath("SpawnContainer (Generated)/Sphere6"), NodePath("SpawnContainer (Generated)/Cube7"), NodePath("SpawnContainer (Generated)/Sphere7"), NodePath("SpawnContainer (Generated)/Cylinder5"), NodePath("SpawnContainer (Generated)/Cube8"), NodePath("SpawnContainer (Generated)/Cylinder6"), NodePath("SpawnContainer (Generated)/Sphere8"), NodePath("SpawnContainer (Generated)/Cube9"), NodePath("SpawnContainer (Generated)/Sphere9"), NodePath("SpawnContainer (Generated)/Sphere10"), NodePath("SpawnContainer (Generated)/Cube10"), NodePath("SpawnContainer (Generated)/Sphere11"), NodePath("SpawnContainer (Generated)/Cylinder7"), NodePath("SpawnContainer (Generated)/Cylinder8"), NodePath("SpawnContainer (Generated)/Sphere12"), NodePath("SpawnContainer (Generated)/Sphere13"), NodePath("SpawnContainer (Generated)/Sphere14"), NodePath("SpawnContainer (Generated)/Sphere15"), NodePath("SpawnContainer (Generated)/Cylinder9"), NodePath("SpawnContainer (Generated)/Sphere16"), NodePath("SpawnContainer (Generated)/Cube11")])
 })
 
-[node name="FloorRule" type="Node3D" parent="." unique_id=23287927]
+[node name="ProbabilitySpawnRule" type="Node3D" parent="PrettyRoomPlanner3D-ProbabilitySpawn" unique_id=23287927]
 script = ExtResource("7_dmvxt")
 metadata/_custom_type_script = "uid://c4t6gp6q0ch1k"
 
-[node name="GridTransformer" type="Node3D" parent="FloorRule" unique_id=1563786007]
+[node name="GridTransformer" type="Node3D" parent="PrettyRoomPlanner3D-ProbabilitySpawn/ProbabilitySpawnRule" unique_id=1563786007]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
 script = ExtResource("8_7sfgk")
-CellCount = 1
+CellSizeX = 2.0
+CellSizeZ = 2.0
+CellPickStrategy = 0
 metadata/_custom_type_script = "uid://ctbxe5q7nxbur"
 
-[node name="SpawnSceneAction" type="Node3D" parent="FloorRule/GridTransformer" unique_id=1163194215]
+[node name="ProbabilitySpawnSceneAction" type="Node3D" parent="PrettyRoomPlanner3D-ProbabilitySpawn/ProbabilitySpawnRule/GridTransformer" unique_id=1163194215]
 script = ExtResource("9_s2hbb")
-SpawnCategories = Array[Object]([SubResource("Resource_re8vx"), SubResource("Resource_f5rei")])
+SpawnCategories = []
 metadata/_custom_type_script = "uid://7vl4td36at11"
+
+[node name="PrettyRoomPlanner3D-SequentialSpawn" type="Node3D" parent="." unique_id=2075131134]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 13.545483, 0, 0)
+script = ExtResource("1_dwhie")
+Size = Vector3(12, 2, 12)
+GenerateOnReady = true
+Seed = 14
+RoomResourceLibrary = Dictionary[String, ExtResource("2_8u5ci")]({
+"another": SubResource("Resource_dwhie"),
+"default": SubResource("Resource_o2xyl")
+})
+SceneInstanceDictionary = Dictionary[String, Array]({
+"another": Array[NodePath]([NodePath("SpawnContainer (Generated)/another/Sphere"), NodePath("SpawnContainer (Generated)/another/Sphere2"), NodePath("SpawnContainer (Generated)/another/Sphere3"), NodePath("SpawnContainer (Generated)/another/Sphere4"), NodePath("SpawnContainer (Generated)/another/Sphere5"), NodePath("SpawnContainer (Generated)/another/Sphere6"), NodePath("SpawnContainer (Generated)/another/Sphere7"), NodePath("SpawnContainer (Generated)/another/Sphere8"), NodePath("SpawnContainer (Generated)/another/Sphere9"), NodePath("SpawnContainer (Generated)/another/Sphere10"), NodePath("SpawnContainer (Generated)/another/Sphere11"), NodePath("SpawnContainer (Generated)/another/Sphere12")]),
+"default": Array[NodePath]([NodePath("SpawnContainer (Generated)/default/Cube"), NodePath("SpawnContainer (Generated)/default/Cylinder"), NodePath("SpawnContainer (Generated)/default/Cube2"), NodePath("SpawnContainer (Generated)/default/Cylinder2"), NodePath("SpawnContainer (Generated)/default/Cube3"), NodePath("SpawnContainer (Generated)/default/Cylinder3"), NodePath("SpawnContainer (Generated)/default/Cube4"), NodePath("SpawnContainer (Generated)/default/Cylinder4"), NodePath("SpawnContainer (Generated)/default/Cube5"), NodePath("SpawnContainer (Generated)/default/Cylinder5"), NodePath("SpawnContainer (Generated)/default/Cube6"), NodePath("SpawnContainer (Generated)/default/Cylinder6"), NodePath("SpawnContainer (Generated)/default/Cube7"), NodePath("SpawnContainer (Generated)/default/Cylinder7"), NodePath("SpawnContainer (Generated)/default/Cube8"), NodePath("SpawnContainer (Generated)/default/Cylinder8"), NodePath("SpawnContainer (Generated)/default/Cube9"), NodePath("SpawnContainer (Generated)/default/Cylinder9"), NodePath("SpawnContainer (Generated)/default/Cube10"), NodePath("SpawnContainer (Generated)/default/Cylinder10"), NodePath("SpawnContainer (Generated)/default/Cube11"), NodePath("SpawnContainer (Generated)/default/Cylinder11"), NodePath("SpawnContainer (Generated)/default/Cube12"), NodePath("SpawnContainer (Generated)/default/Cylinder12")])
+})
+
+[node name="SequentialSpawnRule" type="Node3D" parent="PrettyRoomPlanner3D-SequentialSpawn" unique_id=1836083090]
+script = ExtResource("7_dmvxt")
+metadata/_custom_type_script = "uid://c4t6gp6q0ch1k"
+
+[node name="GridTransformer" type="Node3D" parent="PrettyRoomPlanner3D-SequentialSpawn/SequentialSpawnRule" unique_id=728793276]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+script = ExtResource("8_7sfgk")
+CellSizeX = 2.0
+CellSizeZ = 2.0
+CellPickStrategy = 0
+metadata/_custom_type_script = "uid://ctbxe5q7nxbur"
+
+[node name="SequentialSpawnAction" type="Node3D" parent="PrettyRoomPlanner3D-SequentialSpawn/SequentialSpawnRule/GridTransformer" unique_id=1514233980]
+script = ExtResource("10_kt27n")
+metadata/_custom_type_script = "uid://ccifd0c6v2hdq"

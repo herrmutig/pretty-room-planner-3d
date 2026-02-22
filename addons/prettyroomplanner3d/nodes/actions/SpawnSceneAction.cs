@@ -94,6 +94,7 @@ public partial class SpawnSceneAction : PrettyPlannerAction
 
                     return kvp.Value.Scenes[numGen.RandiRange(0, scenes.Count - 1)];
                 }
+                counter++;
             }
         }
 
