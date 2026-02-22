@@ -3,7 +3,6 @@ using Godot;
 
 namespace PrettyRoomGen3D;
 
-// TODO: Create an alternative Rule that checks for Transform Positions instead of finding a collision and removes an already spawned node
 [Tool]
 [GlobalClass]
 public sealed partial class RemoveOverlappingSceneAction : PrettyPlannerAction

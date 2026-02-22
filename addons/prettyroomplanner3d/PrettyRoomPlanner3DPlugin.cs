@@ -21,10 +21,15 @@ public partial class PrettyRoomPlanner3DPlugin : EditorPlugin
             ICONS_PATH + "box-arrow-in-down-right.svg"
         );
         var houseFillIcon = GD.Load<Texture2D>(ICONS_PATH + "house-fill.svg");
+        var ruleIcon = GD.Load<Texture2D>(ICONS_PATH + "file-ruled-fill.svg");
+        var dashSquareIcon = GD.Load<Texture2D>(ICONS_PATH + "dash-square.svg");
 
         // Load Scripts
         var additiveTransformerScript = GD.Load<Script>(
             TRANSFORMER_PATH + "AdditiveTransformer.cs"
+        );
+        var substractiveTransformer = GD.Load<Script>(
+            TRANSFORMER_PATH + "SubstractiveTransformer.cs"
         );
         var gridTransformerScript = GD.Load<Script>(TRANSFORMER_PATH + "GridTransformer.cs");
         var positionTransformerScript = GD.Load<Script>(
@@ -36,9 +41,11 @@ public partial class PrettyRoomPlanner3DPlugin : EditorPlugin
         var removeOverlappingSceneAction = GD.Load<Script>(
             ACTION_PATH + "RemoveOverlappingSceneAction.cs"
         );
-
         var prettyroomPlanner = GD.Load<Script>(
             "res://addons/prettyroomplanner3d/nodes/PrettyRoomPlanner.cs"
+        );
+        var prettyPlannerRule = GD.Load<Script>(
+            "res://addons/prettyroomplanner3d/nodes/PrettyPlannerRule.cs"
         );
 
         // Add Types and assign Icons
@@ -47,6 +54,12 @@ public partial class PrettyRoomPlanner3DPlugin : EditorPlugin
             nameof(Node3D),
             additiveTransformerScript,
             plusSqureIcon
+        );
+        AddCustomType(
+            nameof(SubstractiveTransformer),
+            nameof(Node3D),
+            substractiveTransformer,
+            dashSquareIcon
         );
         AddCustomType(nameof(GridTransformer), nameof(Node3D), gridTransformerScript, gridIcon);
         AddCustomType(
@@ -76,18 +89,21 @@ public partial class PrettyRoomPlanner3DPlugin : EditorPlugin
             boxArrowInDownRightIcon
         );
         AddCustomType(nameof(PrettyRoomPlanner), nameof(Node3D), prettyroomPlanner, houseFillIcon);
+        AddCustomType(nameof(PrettyPlannerRule), nameof(Node3D), prettyPlannerRule, ruleIcon);
     }
 
     public override void _ExitTree()
     {
         // Clean-up of the plugin goes here.
         RemoveCustomType(nameof(AdditiveTransformer));
+        RemoveCustomType(nameof(SubstractiveTransformer));
         RemoveCustomType(nameof(GridTransformer));
         RemoveCustomType(nameof(PositionTransformer));
         RemoveCustomType(nameof(SpawnSceneAction));
         RemoveCustomType(nameof(SequentialSpawnAction));
         RemoveCustomType(nameof(RemoveOverlappingSceneAction));
         RemoveCustomType(nameof(PrettyRoomPlanner));
+        RemoveCustomType(nameof(PrettyPlannerRule));
     }
 }
 #endif
