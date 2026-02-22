@@ -36,7 +36,9 @@ public partial class PrettyRoomPlanner3DPlugin : EditorPlugin
             TRANSFORMER_PATH + "PositionTransformer.cs"
         );
 
-        var proabilitySpawnSceneAction = GD.Load<Script>(ACTION_PATH + "SpawnSceneAction.cs");
+        var proabilitySpawnSceneAction = GD.Load<Script>(
+            ACTION_PATH + "ProbabilitySpawnSceneAction.cs"
+        );
         var sequentialSpawnSceneAction = GD.Load<Script>(ACTION_PATH + "SequentialSpawnAction.cs");
         var removeOverlappingSceneAction = GD.Load<Script>(
             ACTION_PATH + "RemoveOverlappingSceneAction.cs"
@@ -70,7 +72,7 @@ public partial class PrettyRoomPlanner3DPlugin : EditorPlugin
         );
 
         AddCustomType(
-            nameof(SpawnSceneAction),
+            nameof(ProbabilitySpawnSceneAction),
             nameof(Node3D),
             proabilitySpawnSceneAction,
             dropboxIcon
@@ -99,7 +101,7 @@ public partial class PrettyRoomPlanner3DPlugin : EditorPlugin
         RemoveCustomType(nameof(SubstractiveTransformer));
         RemoveCustomType(nameof(GridTransformer));
         RemoveCustomType(nameof(PositionTransformer));
-        RemoveCustomType(nameof(SpawnSceneAction));
+        RemoveCustomType(nameof(ProbabilitySpawnSceneAction));
         RemoveCustomType(nameof(SequentialSpawnAction));
         RemoveCustomType(nameof(RemoveOverlappingSceneAction));
         RemoveCustomType(nameof(PrettyRoomPlanner));

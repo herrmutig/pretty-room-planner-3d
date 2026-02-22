@@ -21,5 +21,17 @@ public partial class PrettyRoomResource : Resource
             EmitChanged();
         }
     }
+
+    public PackedScene GetScene(int relativeIndex)
+    {
+        if (scenes == null || scenes.Count == 0)
+            return null;
+
+        if (relativeIndex < 0)
+            relativeIndex = Mathf.Abs(relativeIndex);
+
+        return scenes[relativeIndex % scenes.Count];
+    }
+
     private Array<PackedScene> scenes = new();
 }

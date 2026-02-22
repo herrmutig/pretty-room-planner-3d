@@ -11,10 +11,11 @@ namespace PrettyRoomGen3D;
 [GlobalClass]
 public sealed partial class SequentialSpawnAction : PrettyPlannerAction
 {
-    class PackedSceneNode
+    class PrettyRoomResourceNode
     {
         public Transform3D transform;
         public PackedScene scene;
+        public PrettyRoomResource resource;
         public string category;
     }
 
@@ -38,17 +39,24 @@ public sealed partial class SequentialSpawnAction : PrettyPlannerAction
         if (transformer == null)
             return;
 
-        var packedSceneNodes = CreatePackedSceneNodeList(transformer);
+        var roomResourceNodes = CreateRoomResourceNodeList(transformer);
         // Spawn Scenes
-        foreach (var packedSceneNode in packedSceneNodes)
+        foreach (var roomResourceNode in roomResourceNodes)
         {
-            Transform3D transform = packedSceneNode.transform;
-            Node instance = InstantiateRoomResource(packedSceneNode.scene, transform);
-            roomPlanner.AddSceneInstance(packedSceneNode.category, instance);
+            Transform3D transform = roomResourceNode.transform;
+            Node instance = InstantiatePackedScene(roomResourceNode.scene, transform);
+            roomPlanner.AddSceneInstance(
+                roomResourceNode.category,
+                instance,
+                roomResourceNode.resource
+            );
+
+            // Note: similar metadata will override metadata from the provided RoomResource - see AddSceneInstance()
+            MetadataUtility.CopyMetadata(this, instance);
         }
     }
 
-    private Node InstantiateRoomResource(PackedScene scene, Transform3D transform)
+    private Node InstantiatePackedScene(PackedScene scene, Transform3D transform)
     {
         Node3D instance = (Node3D)scene.Instantiate();
         instance.Position = transform.Origin;
@@ -56,13 +64,15 @@ public sealed partial class SequentialSpawnAction : PrettyPlannerAction
         return instance;
     }
 
-    private List<PackedSceneNode> CreatePackedSceneNodeList(PrettyPlannerTransformer transformer)
+    private List<PrettyRoomResourceNode> CreateRoomResourceNodeList(
+        PrettyPlannerTransformer transformer
+    )
     {
         var roomPlanner = RoomPlanner;
         var transformations = transformer.GetTransformations();
         var library = roomPlanner.RoomResourceLibrary;
 
-        List<PackedSceneNode> packedSceneNodes = new();
+        List<PrettyRoomResourceNode> roomResourceNodes = new();
         int transformationIndex = 0;
         bool sceneFound = true;
 
@@ -85,19 +95,20 @@ public sealed partial class SequentialSpawnAction : PrettyPlannerAction
                         if (scene == null)
                             continue;
 
-                        packedSceneNodes.Add(
-                            new PackedSceneNode
+                        roomResourceNodes.Add(
+                            new PrettyRoomResourceNode
                             {
                                 transform = transformations[transformationIndex],
                                 scene = scene,
                                 category = category,
+                                resource = roomResource,
                             }
                         );
                         sceneFound = true;
                         transformationIndex++;
 
                         if (transformationIndex >= transformations.Length)
-                            return packedSceneNodes;
+                            return roomResourceNodes;
                     }
                 }
             }
@@ -119,12 +130,13 @@ public sealed partial class SequentialSpawnAction : PrettyPlannerAction
                         if (transformationIndex >= transformations.Length)
                             break;
 
-                        packedSceneNodes.Add(
-                            new PackedSceneNode
+                        roomResourceNodes.Add(
+                            new PrettyRoomResourceNode
                             {
                                 transform = transformations[transformationIndex],
                                 scene = scene,
                                 category = category,
+                                resource = kvp.Value,
                             }
                         );
 
@@ -132,7 +144,7 @@ public sealed partial class SequentialSpawnAction : PrettyPlannerAction
                         transformationIndex++;
 
                         if (transformationIndex >= transformations.Length)
-                            return packedSceneNodes;
+                            return roomResourceNodes;
                     }
                 }
             }
@@ -147,6 +159,6 @@ public sealed partial class SequentialSpawnAction : PrettyPlannerAction
             }
         }
 
-        return packedSceneNodes;
+        return roomResourceNodes;
     }
 }

@@ -4,11 +4,9 @@ using Godot.Collections;
 
 namespace PrettyRoomGen3D;
 
-// TODO Rename to ProbabilitySpawnAction -> Add boolean to use fallback category
-// TODO Add a string fallbackCategory (Can be empty)
 [GlobalClass]
 [Tool]
-public partial class SpawnSceneAction : PrettyPlannerAction
+public partial class ProbabilitySpawnSceneAction : PrettyPlannerAction
 {
     [ExportGroup("Spawn Settings")]
     [Export]
@@ -22,7 +20,7 @@ public partial class SpawnSceneAction : PrettyPlannerAction
         if (OverrideTransformer == null && FindLastPlannerTransformer() == null)
             return
             [
-                $"{nameof(SpawnSceneAction)} has no transformer attached, please set an OverrideTransformer or add one as parent to this node",
+                $"{nameof(ProbabilitySpawnSceneAction)} has no transformer attached, please set an OverrideTransformer or add one as parent to this node",
             ];
         return [];
     }
@@ -38,7 +36,7 @@ public partial class SpawnSceneAction : PrettyPlannerAction
         if (transformer == null)
         {
             GD.PushWarning(
-                $"{nameof(SpawnSceneAction)} has no transformer attached, please set an OverrideTransformer or add one as parent to this node"
+                $"{nameof(ProbabilitySpawnSceneAction)} has no transformer attached, please set an OverrideTransformer or add one as parent to this node"
             );
             return;
         }
@@ -58,7 +56,9 @@ public partial class SpawnSceneAction : PrettyPlannerAction
             if (sortedSpawnCategories != null)
                 category = RollCategory(sortedSpawnCategories);
 
-            PackedScene scene = GetRandomPackedScene(category);
+            int randomIndex = roomPlanner.NumberGenerator.RandiRange(0, int.MaxValue);
+            PrettyRoomResource roomResource = roomPlanner.GetRoomResource(category);
+            PackedScene scene = roomResource != null ? roomResource.GetScene(randomIndex) : null;
 
             if (scene == null)
             {
@@ -71,42 +71,11 @@ public partial class SpawnSceneAction : PrettyPlannerAction
             Node3D instance = (Node3D)scene.Instantiate();
             instance.Position = transform.Origin;
             instance.Quaternion = transform.Basis.GetRotationQuaternion();
-            roomPlanner.AddSceneInstance(category, instance);
+            roomPlanner.AddSceneInstance(category, instance, roomResource);
+
+            // Note: similar metadata will override metadata from the provided RoomResource - see AddSceneInstance()
+            MetadataUtility.CopyMetadata(this, instance);
         }
-    }
-
-    PackedScene GetRandomPackedScene(string roomResourceCategory = "")
-    {
-        var roomResources = RoomPlanner.RoomResourceLibrary;
-        var numGen = RoomPlanner.NumberGenerator;
-
-        if (string.IsNullOrWhiteSpace(roomResourceCategory))
-        {
-            var randomNumber = numGen.RandiRange(0, roomResources.Count - 1);
-            int counter = 0;
-            foreach (var kvp in roomResources)
-            {
-                if (counter == randomNumber)
-                {
-                    var scenes = kvp.Value.Scenes;
-                    if (scenes.Count == 0)
-                        return null;
-
-                    return kvp.Value.Scenes[numGen.RandiRange(0, scenes.Count - 1)];
-                }
-                counter++;
-            }
-        }
-
-        if (roomResources.TryGetValue(roomResourceCategory, out PrettyRoomResource resource))
-        {
-            if (resource.Scenes.Count == 0)
-                return null;
-
-            return resource.Scenes[numGen.RandiRange(0, resource.Scenes.Count - 1)];
-        }
-
-        return null;
     }
 
     string RollCategory(IOrderedEnumerable<CategoryProbabilityResource> spawnCategories)

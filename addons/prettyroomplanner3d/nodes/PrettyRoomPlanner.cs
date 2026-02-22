@@ -115,6 +115,31 @@ public partial class PrettyRoomPlanner : Node3D
         }
     }
 
+    public PrettyRoomResource GetRoomResource(string roomResourceCategory = "")
+    {
+        var roomResources = RoomResourceLibrary;
+        var numGen = NumberGenerator;
+
+        if (string.IsNullOrWhiteSpace(roomResourceCategory))
+        {
+            var randomNumber = numGen.RandiRange(0, roomResources.Count - 1);
+            int counter = 0;
+            foreach (var kvp in roomResources)
+            {
+                if (counter == randomNumber)
+                    return kvp.Value;
+                counter++;
+            }
+        }
+
+        if (roomResources.TryGetValue(roomResourceCategory, out PrettyRoomResource resource))
+        {
+            return resource;
+        }
+
+        return null;
+    }
+
     public Node3D[] GetRoomResourceInstancesByCategory(string category)
     {
         if (SceneInstanceDictionary.ContainsKey(category))
@@ -151,8 +176,9 @@ public partial class PrettyRoomPlanner : Node3D
         return false;
     }
 
-    public void AddSceneInstance(string category, Node instance)
+    public void AddSceneInstance(string category, Node instance, PrettyRoomResource roomResource)
     {
+        MetadataUtility.CopyMetadata(roomResource, instance);
         instance.SetMeta(METADATA_PLANNER_NODEPATH, GetPath());
         instance.SetMeta(METADATA_PLANNER_ROOMRESOURCE_CATEGORY, category);
 

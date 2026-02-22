@@ -8,7 +8,7 @@
 [ext_resource type="Resource" uid="uid://lkikibj3gahl" path="res://planner-examples/room-resources/wall-room-resource.tres" id="5_7obxw"]
 [ext_resource type="Script" uid="uid://ctbxe5q7nxbur" path="res://addons/prettyroomplanner3d/nodes/transformers/GridTransformer.cs" id="5_sv6ec"]
 [ext_resource type="Script" uid="uid://cp0ihok8hchlf" path="res://addons/prettyroomplanner3d/resources/CategoryProbabilityResource.cs" id="6_7obxw"]
-[ext_resource type="Script" uid="uid://7vl4td36at11" path="res://addons/prettyroomplanner3d/nodes/actions/SpawnSceneAction.cs" id="6_eju6n"]
+[ext_resource type="Script" uid="uid://7vl4td36at11" path="res://addons/prettyroomplanner3d/nodes/actions/ProbabilitySpawnSceneAction.cs" id="6_eju6n"]
 [ext_resource type="Resource" uid="uid://b22r4gf0emc20" path="res://planner-examples/room-resources/wall-corner-room-resource.tres" id="6_vbht4"]
 [ext_resource type="Script" uid="uid://dgxtjb7sglmaq" path="res://addons/prettyroomplanner3d/nodes/transformers/AdditiveTransformer.cs" id="10_jjxvb"]
 [ext_resource type="PackedScene" uid="uid://f4nw01pby5v2" path="res://planner-examples/scenes/floors/template_floor.tscn" id="10_vvuc5"]

@@ -4,7 +4,7 @@
 [ext_resource type="Script" uid="uid://cfscuu7607i0" path="res://addons/prettyroomplanner3d/resources/PrettyRoomResource.cs" id="2_8u5ci"]
 [ext_resource type="Script" uid="uid://c4t6gp6q0ch1k" path="res://addons/prettyroomplanner3d/nodes/PrettyPlannerRule.cs" id="7_dmvxt"]
 [ext_resource type="Script" uid="uid://ctbxe5q7nxbur" path="res://addons/prettyroomplanner3d/nodes/transformers/GridTransformer.cs" id="8_7sfgk"]
-[ext_resource type="Script" uid="uid://7vl4td36at11" path="res://addons/prettyroomplanner3d/nodes/actions/SpawnSceneAction.cs" id="9_s2hbb"]
+[ext_resource type="Script" uid="uid://7vl4td36at11" path="res://addons/prettyroomplanner3d/nodes/actions/ProbabilitySpawnSceneAction.cs" id="9_s2hbb"]
 [ext_resource type="PackedScene" uid="uid://xs736jgmvefe" path="res://planner-examples/scenes/primitives/cube.tscn" id="10_d7vfn"]
 [ext_resource type="Script" uid="uid://ccifd0c6v2hdq" path="res://addons/prettyroomplanner3d/nodes/actions/SequentialSpawnAction.cs" id="10_kt27n"]
 [ext_resource type="PackedScene" uid="uid://ch4rpesmiq0d" path="res://planner-examples/scenes/primitives/cylinder.tscn" id="11_8jodk"]
