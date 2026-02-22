@@ -8,7 +8,7 @@ points = PackedVector3Array(-2, 0, -2, -2, 0, 2, -1.2012529, 0.09998042, -0.2447
 [node name="TemplateFloor-Detail-B" unique_id=1210692547 instance=ExtResource("1_4j240")]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
-[node name="StaticBody3D" type="StaticBody3D" parent="template-floor-detail" parent_id_path=PackedInt32Array(779383658) index="0" unique_id=1541084910]
+[node name="StaticBody3D" type="StaticBody3D" parent="template-floor-detail" parent_id_path=PackedInt32Array(1180813420) index="0" unique_id=1541084910]
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="template-floor-detail/StaticBody3D" index="0" unique_id=521925001]
 shape = SubResource("ConvexPolygonShape3D_dt8qw")

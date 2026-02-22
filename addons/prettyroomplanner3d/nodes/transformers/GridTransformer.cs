@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Godot;
 
@@ -21,6 +22,9 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
     }
 
     [ExportGroup("Grid Settings")]
+    [Export]
+    public AnchorStrategy Anchor { get; set; }
+
     [Export(PropertyHint.Range, "0.1,1,")]
     public float RelativeSizeX { get; set; } = 1f;
 
@@ -79,10 +83,68 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
         if (maxColumns == 0 || maxRows == 0 || cellCount == 0)
             return [];
 
-        Vector2I iterations = GetIterations();
-        Vector3 origin = GetOriginPosition();
+        Vector2I iterations = GetCellCount();
+        int xLimit = CalculateCellCountLimit(iterations.X, maxColumns);
+        int yLimit = CalculateCellCountLimit(iterations.Y, maxRows);
 
+        var result = BuildGrid(iterations, xLimit, yLimit);
+
+        if (cellCount > 0)
+        {
+            cellCount = Mathf.Clamp(cellCount, 1, result.Count);
+            switch (CellPickStrategy)
+            {
+                case CellTakeStrategy.FromStart:
+                    return result.Take(cellCount).ToArray();
+                case CellTakeStrategy.FromCenter:
+                {
+                    Vector3 center = result[result.Count / 2].Origin;
+                    result.Sort(
+                        (a, b) =>
+                        {
+                            return center
+                                .DistanceSquaredTo(a.Origin)
+                                .CompareTo(center.DistanceSquaredTo(b.Origin));
+                        }
+                    );
+                    return result.Take(cellCount).ToArray();
+                }
+                case CellTakeStrategy.InverseFromCenter:
+                {
+                    Vector3 center = result[result.Count / 2].Origin;
+                    result.Sort(
+                        (a, b) =>
+                        {
+                            return center
+                                .DistanceSquaredTo(b.Origin)
+                                .CompareTo(center.DistanceSquaredTo(a.Origin));
+                        }
+                    );
+                    return result.Take(cellCount).ToArray();
+                }
+                case CellTakeStrategy.FromEnd:
+                    return result.TakeLast(cellCount).ToArray();
+                default:
+                    throw new NotImplementedException(
+                        $"{nameof(CellPickStrategy)} is not implemented"
+                    );
+            }
+        }
+
+        return result.ToArray();
+        // Filters result dependent on CellCount and Strategy
+
+        /*  */
+
+        //return result.ToArray();
+    }
+
+    private List<Transform3D> BuildGrid(Vector2I iterations, int xLimit, int yLimit)
+    {
         List<Transform3D> result = new();
+        int x = InvertColumnOrder ? iterations.X - 1 : 0;
+        int xStep = InvertColumnOrder ? -1 : 1;
+        int zStep = InvertRowOrder ? -1 : 1;
 
         Vector3 radAngles = new Vector3(
             Mathf.DegToRad(CellRotation.X),
@@ -90,32 +152,12 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
             Mathf.DegToRad(CellRotation.Z)
         );
 
-        int xLimit = CalculateIterationLimit(iterations.X, maxColumns);
-        int yLimit = CalculateIterationLimit(iterations.Y, maxRows);
+        Vector3 origin = GetOriginPosition();
 
-        int x = InvertColumnOrder ? iterations.X - 1 : 0;
-        int xStep = InvertColumnOrder ? -1 : 1;
-        int zStep = InvertRowOrder ? -1 : 1;
-
-        Func<int, int, bool, bool> columnCheck = (index, limit, invert) =>
-        {
-            if (invert)
-                return index >= 0 && index >= iterations.X - limit;
-            return index >= 0 && index < limit;
-        };
-
-        Func<int, int, bool, bool> rowCheck = (index, limit, invert) =>
-        {
-            if (invert)
-                return index >= 0 && index >= iterations.Y - limit;
-            return index >= 0 && index < limit;
-        };
-
-        while (columnCheck(x, xLimit, InvertColumnOrder))
+        while (IterationCheck(x, xLimit, iterations.X, InvertColumnOrder))
         {
             int z = InvertRowOrder ? iterations.Y - 1 : 0;
-
-            while (rowCheck(z, yLimit, InvertRowOrder))
+            while (IterationCheck(z, yLimit, iterations.Y, InvertRowOrder))
             {
                 Transform3D transform = new Transform3D(
                     Basis.FromEuler(radAngles),
@@ -128,68 +170,61 @@ public sealed partial class GridTransformer : PrettyPlannerTransformer
             x += xStep;
         }
 
-        // Filters result dependent on CellCount and Strategy
-        if (cellCount > 0)
-        {
-            cellCount = Mathf.Clamp(cellCount, 1, result.Count);
-            switch (CellPickStrategy)
-            {
-                case CellTakeStrategy.FromStart:
-                    return result.Take(cellCount).ToArray();
-                case CellTakeStrategy.FromCenter:
-                    return result.Skip((result.Count - cellCount) / 2).Take(cellCount).ToArray();
-                case CellTakeStrategy.InverseFromCenter:
-                {
-                    var enumeration = result.Skip(cellCount);
-                    enumeration = enumeration.Take(Mathf.Max(0, enumeration.Count() - cellCount));
-                    return enumeration.ToArray();
-                }
-                case CellTakeStrategy.FromEnd:
-                    return result.TakeLast(cellCount).ToArray();
-                default:
-                    throw new NotImplementedException(
-                        $"{nameof(CellPickStrategy)} is not implemented"
-                    );
-            }
-        }
-
-        return result.ToArray();
+        return result;
     }
 
-    public Vector2I GetIterations()
+    /// <summary>
+    /// Checks whether a iteration (column or row) is within a <c>limit</c>,
+    /// either from the start or from the end of the <c>cellCountDimension</c>.
+    /// </summary>
+    /// <remarks>
+    /// if invert is <c>false</c> it checks if the <c>index</c> is between limit (excluded) and cellCountDimension.
+    /// <c>invert</c> = <c>true</c> checks if the <c>index</c> is outside of limit (included).
+    /// </remarks>
+    private bool IterationCheck(int index, int limit, int cellCountDimension, bool invert) =>
+        invert
+            ? (index >= 0 && index >= cellCountDimension - limit)
+            : (index >= 0 && index < limit);
+
+    /// <summary>
+    /// Gets back the maximum number of cells possible for the grid.
+    /// </summary>
+    /// <remarks>
+    /// This method utilizes <see cref="AlwaysRoundToNextCell"/> to ceil to the next integer if needed.
+    /// </remarks>
+    private Vector2I GetCellCount()
     {
-        Vector3 size = GetGridSize();
-        Vector2I iterations = new Vector2I(
+        Vector2 size = GetGridSize();
+        return new Vector2I(
             AlwaysRoundToNextCell
                 ? Mathf.CeilToInt(size.X / CellSizeX)
                 : Mathf.RoundToInt(size.X / CellSizeX),
             AlwaysRoundToNextCell
-                ? Mathf.CeilToInt(size.Z / CellSizeZ)
-                : Mathf.RoundToInt(size.Z / CellSizeZ)
+                ? Mathf.CeilToInt(size.Y / CellSizeZ)
+                : Mathf.RoundToInt(size.Y / CellSizeZ)
         );
-
-        return iterations;
     }
 
-    public Vector3 GetGridSize()
-    {
-        var size = RoomPlanner.Size;
-        size.X *= RelativeSizeX;
-        size.Z *= RelativeSizeZ;
-        size.Y = 0.01f;
-        return size;
-    }
+    /// <summary>
+    /// Calculates the effective grid size for the GridTransformer.
+    /// </summary>
+    /// <remarks>
+    /// This method utilizes <see cref="RelativeSize"/> and the <see cref="RoomPlanner.Size"/>
+    /// to determine the grid size.
+    /// </remarks>
+    private Vector2 GetGridSize() =>
+        new Vector2(RoomPlanner.Size.X * RelativeSizeX, RoomPlanner.Size.Z * RelativeSizeZ);
 
-    public Vector3 GetOriginPosition()
+    private Vector3 GetOriginPosition()
     {
-        Vector3 size = GetGridSize();
+        Vector2 size = GetGridSize();
         Vector3 origin = Vector3.Zero;
         origin.X = -size.X * 0.5f + 0.5f * CellSizeX;
-        origin.Z = -size.Z * 0.5f + 0.5f * CellSizeZ;
+        origin.Z = -size.Y * 0.5f + 0.5f * CellSizeZ;
         return origin + Position;
     }
 
-    private int CalculateIterationLimit(int iterationDimension, int limit)
+    private int CalculateCellCountLimit(int iterationDimension, int limit)
     {
         if (limit < 0)
             return iterationDimension;

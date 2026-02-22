@@ -7,7 +7,7 @@ data = PackedVector3Array(-1.2875, 0.099999994, 0.436, -1.2522, 0, 0.49719998, -
 
 [node name="TemplateCorner" unique_id=191816296 instance=ExtResource("1_m7tqw")]
 
-[node name="template-corner" parent="." index="0" unique_id=730290836]
+[node name="template-corner" parent="." index="0" unique_id=1740552548]
 transform = Transform3D(0.5, 0, 0, 0, 0.5, 0, 0, 0, 0.5, 0, 0, 0)
 
 [node name="StaticBody3D" type="StaticBody3D" parent="template-corner" index="0" unique_id=918305838]

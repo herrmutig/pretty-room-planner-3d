@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://dq7kv42to1xtq"]
+
+[ext_resource type="Script" uid="uid://crjay0yb1gdv2" path="res://addons/prettyroomplanner3d/nodes/PrettyRoomPlanner.cs" id="1_dwhie"]
+[ext_resource type="Script" uid="uid://cfscuu7607i0" path="res://addons/prettyroomplanner3d/resources/PrettyRoomResource.cs" id="2_8u5ci"]
+[ext_resource type="Resource" uid="uid://buqw60cv14k5" path="res://planner-examples/room-resources/floor-room-resource.tres" id="3_ewpy5"]
+[ext_resource type="Resource" uid="uid://b7bccjfkwqhmp" path="res://planner-examples/room-resources/floor-room-resource-detail.tres" id="4_w3liu"]
+[ext_resource type="Resource" uid="uid://lkikibj3gahl" path="res://planner-examples/room-resources/wall-room-resource.tres" id="5_tcuk0"]
+[ext_resource type="Resource" uid="uid://b22r4gf0emc20" path="res://planner-examples/room-resources/wall-corner-room-resource.tres" id="6_cpqwt"]
+[ext_resource type="Script" uid="uid://c4t6gp6q0ch1k" path="res://addons/prettyroomplanner3d/nodes/PrettyPlannerRule.cs" id="7_dmvxt"]
+[ext_resource type="Script" uid="uid://ctbxe5q7nxbur" path="res://addons/prettyroomplanner3d/nodes/transformers/GridTransformer.cs" id="8_7sfgk"]
+[ext_resource type="Script" uid="uid://7vl4td36at11" path="res://addons/prettyroomplanner3d/nodes/actions/SpawnSceneAction.cs" id="9_s2hbb"]
+[ext_resource type="Script" uid="uid://cp0ihok8hchlf" path="res://addons/prettyroomplanner3d/resources/CategoryProbabilityResource.cs" id="10_mjxel"]
+
+[sub_resource type="Resource" id="Resource_re8vx"]
+resource_name = "Floor Probability"
+script = ExtResource("10_mjxel")
+Category = "floor"
+Probability = 0.75
+metadata/_custom_type_script = "uid://cp0ihok8hchlf"
+
+[sub_resource type="Resource" id="Resource_f5rei"]
+resource_name = "Floor-Detail Probability"
+script = ExtResource("10_mjxel")
+Category = "floor-detail"
+Probability = 0.1
+metadata/_custom_type_script = "uid://cp0ihok8hchlf"
+
+[node name="PrettyRoomPlanner3D-Example-2" type="Node3D" unique_id=222939185]
+script = ExtResource("1_dwhie")
+Size = Vector3(9, 2, 7)
+GenerateOnReady = true
+Seed = 14
+RoomResourceLibrary = Dictionary[String, ExtResource("2_8u5ci")]({
+"floor": ExtResource("3_ewpy5"),
+"floor-detail": ExtResource("4_w3liu"),
+"wall": ExtResource("5_tcuk0"),
+"wall-corner": ExtResource("6_cpqwt")
+})
+SceneInstanceDictionary = Dictionary[String, Array]({
+"floor": Array[NodePath]([NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath("")]),
+"wall": Array[NodePath]([NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath(""), NodePath("")]),
+"wall-corner": Array[NodePath]([NodePath(""), NodePath(""), NodePath(""), NodePath("")])
+})
+
+[node name="FloorRule" type="Node3D" parent="." unique_id=23287927]
+script = ExtResource("7_dmvxt")
+metadata/_custom_type_script = "uid://c4t6gp6q0ch1k"
+
+[node name="GridTransformer" type="Node3D" parent="FloorRule" unique_id=1563786007]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -1, 0)
+script = ExtResource("8_7sfgk")
+CellCount = 1
+metadata/_custom_type_script = "uid://ctbxe5q7nxbur"
+
+[node name="SpawnSceneAction" type="Node3D" parent="FloorRule/GridTransformer" unique_id=1163194215]
+script = ExtResource("9_s2hbb")
+SpawnCategories = Array[Object]([SubResource("Resource_re8vx"), SubResource("Resource_f5rei")])
+metadata/_custom_type_script = "uid://7vl4td36at11"

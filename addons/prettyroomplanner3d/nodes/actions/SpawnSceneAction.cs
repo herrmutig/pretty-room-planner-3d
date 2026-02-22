@@ -4,6 +4,8 @@ using Godot.Collections;
 
 namespace PrettyRoomGen3D;
 
+// TODO Rename to ProbabilitySpawnAction -> Add boolean to use fallback category
+// TODO Add a string fallbackCategory (Can be empty)
 [GlobalClass]
 [Tool]
 public partial class SpawnSceneAction : PrettyPlannerAction
